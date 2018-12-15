@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Woody",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png",
-      "likes": 5
+      "likes": 7
     },
     {
       "id": 2,
@@ -47,6 +47,36 @@
       "name": "Little Green Men",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Alien-PNG-File.png",
       "likes": -2
+    },
+    {
+      "name": "Test",
+      "image": "https://folduptoys.com/wp-content/uploads/2018/03/PTI-Crash-Test-Dummy-Paper-Toy-Model-Image-Close-Up-600x400.jpg",
+      "likes": 0,
+      "id": 9
+    },
+    {
+      "name": "teddy",
+      "image": "https://folduptoys.com/wp-content/uploads/2018/03/PTI-Crash-Test-Dummy-Paper-Toy-Model-Image-Close-Up-600x400.jpg",
+      "likes": 0,
+      "id": 10
+    },
+    {
+      "name": "3e",
+      "image": "https://folduptoys.com/wp-content/uploads/2018/03/PTI-Crash-Test-Dummy-Paper-Toy-Model-Image-Close-Up-600x400.jpg",
+      "likes": 0,
+      "id": 11
+    },
+    {
+      "name": "d",
+      "image": "https://images-na.ssl-images-amazon.com/images/I/81QpshLNqeL._SL1500_.jpg",
+      "likes": 0,
+      "id": 12
+    },
+    {
+      "name": "rew",
+      "image": "https://folduptoys.com/wp-content/uploads/2018/03/PTI-Crash-Test-Dummy-Paper-Toy-Model-Image-Close-Up-600x400.jpg",
+      "likes": 0,
+      "id": 13
     }
   ]
 }
