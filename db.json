@@ -47,6 +47,27 @@
       "name": "Little Green Men",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Alien-PNG-File.png",
       "likes": -2
+    },
+    {
+      "name": "Bob",
+      "image": "image",
+      "id": 9
+    },
+    {
+      "name": "Bob2.0",
+      "image": "https://www.kmart.com.au/wcsstore/Kmart/images/ncatalog/sz/8/42269878-1-sz.jpg",
+      "id": 10
+    },
+    {
+      "name": "Bob3.0",
+      "image": "https://images-na.ssl-images-amazon.com/images/I/61ikI6gmd%2BL._SY355_.jpg",
+      "id": 11
+    },
+    {
+      "name": "Dave",
+      "image": "https://cdn7.bigcommerce.com/s-66730/images/stencil/1280x1280/products/3705/12254/Rubber_Bath_Duck_Singapore__29324.1503912397.jpg?c=2&imbypass=on",
+      "likes": 0,
+      "id": 12
     }
   ]
 }
