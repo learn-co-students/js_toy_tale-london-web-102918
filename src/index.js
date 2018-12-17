@@ -42,7 +42,7 @@ function renderSingleToy(toy) {
   toyBtn.innerText = "Like <3"
   toyCollection.appendChild(toyDivElement)
   toyDivElement.appendChild(toyBtn)
-  toyBtn.addEventListener('click', likeToy(`${toy.id}`))
+  toyBtn.addEventListener('click', () => likeToy(`${toy.id}`))
 }
 
 function saveNewToy(event) {
@@ -69,20 +69,28 @@ function saveNewToy(event) {
 }
 
 function likeToy(id) {
+  console.log("liked");
   let toyLikes = document.getElementById(`likes-${id}`).innerText
   toyLikes = Number(toyLikes.split(" ")[0]) + 1
   fetch(`${toysURL}/${id}`, {
     method: 'PATCH',
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/json"
+      "Accept": "application/json"
     },
     body: JSON.stringify({
       likes: toyLikes
     })
   })
-  fetchToys
-}  //NEEDS INVESTIGATION FOR CORS ERROR.
+  .then(response => response.json())
+  .then((toy) => {
+    let toyLikes = document.getElementById(`likes-${toy.id}`)
+    toyLikes.innerText = `${toy.likes} likes`
+  })
+
+
+  // fetchToys()
+}
 
 newToyButton.addEventListener('click', saveNewToy)
 
