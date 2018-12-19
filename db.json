@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Woody",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png",
-      "likes": 5
+      "likes": 115
     },
     {
       "id": 2,
@@ -47,6 +47,36 @@
       "name": "Little Green Men",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Alien-PNG-File.png",
       "likes": -2
+    },
+    {
+      "name": "Chris",
+      "image": "Superman",
+      "likes": 0,
+      "id": 9
+    },
+    {
+      "name": "Chris",
+      "image": "Superman",
+      "likes": 0,
+      "id": 10
+    },
+    {
+      "name": "Chris",
+      "image": "Superman",
+      "likes": 0,
+      "id": 11
+    },
+    {
+      "name": "wachira",
+      "image": "Btaman",
+      "likes": 0,
+      "id": 12
+    },
+    {
+      "name": "Tommmyyyy",
+      "image": "Spiderman",
+      "likes": 0,
+      "id": 13
     }
   ]
 }
