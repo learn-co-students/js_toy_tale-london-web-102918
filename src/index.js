@@ -27,6 +27,7 @@ const renderSingleToy = (toy) => {
     //Creating a main div element for a toy
     let toyDiv = document.createElement('div');
     //Sets or eturn the class name of an element
+    toyDiv.dataset.id = toy.id; //creating a dataset id for toy likes
     toyDiv.className = "card";
     let toyName = document.createElement('h2');
     // Sets or returns the text content of the specified node, and all its descendants.
@@ -80,6 +81,7 @@ let fetchData = {
 }
 
 toyCollection.addEventListener('click', (event) => {
+  console.log(event)
   let likeButton = event.target.className === "like-btn"
 
   if (likeButton) {
@@ -100,7 +102,7 @@ toyCollection.addEventListener('click', (event) => {
 
     })
     .then(resp => resp.json())
-    .then(like)
+    .then(console.log)
   }
 })
 
