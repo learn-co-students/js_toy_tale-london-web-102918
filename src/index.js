@@ -1,9 +1,11 @@
+const toysURL = 'http://localhost:3000/toys'
 const addBtn = document.querySelector('#new-toy-btn')
 const toyForm = document.querySelector('.container')
-const toysURL = 'http://localhost:3000/toys'
-const toyCollection = document.getElementById('toy-collection')
+const newToyName = toyForm.querySelector('input[name=name]')
+const newToyImage = toyForm.querySelector('input[name=image]')
+const createToyBtn = toyForm.querySelector('input[name=submit]')
+const toyCollectionDiv = document.getElementById('toy-collection')
 let addToy = false
-const newToyButton = document.querySelector('input[name=submit]')
 
 // YOUR CODE HERE
 
@@ -18,80 +20,84 @@ addBtn.addEventListener('click', () => {
   }
 })
 
-function fetchToys() {
-  fetch(`${toysURL}`)
-  .then(response => response.json())
-  .then(toys => renderToys(toys))
+// fetch all toys
+const fetchToys = () => {
+  fetch(toysURL)
+    .then(response => response.json())
+    .then((toys) => renderAllToys(toys))
 }
 
-function renderToys(toysArray) {
-  toysArray.forEach(renderSingleToy)
-}
-function renderSingleToy(toy) {
-  const toyDivElement = document.createElement('div')
-  const toyBtn = document.createElement('button')
-  toyDivElement.className = 'card'
-  toyDivElement.id = toy.id
-  toyDivElement.innerHTML = `
+// render a single toy
+const renderSingleToy = (toy) => {
+  const toyCardDiv = document.createElement('div')
+  const toyLikesBtn = document.createElement('button')
+  toyCardDiv.className = 'card'
+  toyCardDiv.innerHTML = `
     <h2>${toy.name}</h2>
-    <img src="${toy.image}" class='toy-avatar' alt="Picture of Toy: ${toy.name}">
-    <p id = likes-${toy.id}>${toy.likes} likes</p>
+    <img src="${toy.image}" class='toy-avatar' alt="Image for ${toy.name}.">
+    <p id="likes-${toy.id}">${toy.likes} likes</p>
   `
-  toyBtn.className = "like-btn"
-  toyBtn.id = `${toy.id}`
-  toyBtn.innerText = "Like <3"
-  toyCollection.appendChild(toyDivElement)
-  toyDivElement.appendChild(toyBtn)
-  toyBtn.addEventListener('click', () => likeToy(`${toy.id}`))
+  toyLikesBtn.id = toy.id
+  toyLikesBtn.className = "like-btn"
+  toyLikesBtn.innerText = "Like <3"
+  toyLikesBtn.addEventListener('click', (event) => likeToy(event, toy))
+  toyCollectionDiv.appendChild(toyCardDiv)
+  toyCardDiv.appendChild(toyLikesBtn)
+}
+// render all the toys
+const renderAllToys = (toys) => {
+  toys.forEach((toy) => {
+    renderSingleToy(toy)
+  });
 }
 
-function saveNewToy(event) {
+// create a new toy
+const saveNewToy = (event) => {
   event.preventDefault()
-  const toyName = document.querySelector('input[name=name]').value
-  const toyImage = document.querySelector('input[name=image]').value
-  renderSingleToy({
-    name: toyName,
-    image: toyImage,
-    likes: 0
-  })
-
-  fetch(`${toysURL}`, {
+  fetch(toysURL, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
+      "Accept": "application/json"
     },
     body: JSON.stringify({
-      name: toyName,
-      image: toyImage,
-      likes: 0
+      "name": newToyName.value,
+      "image": newToyImage.value,
+      "likes": 0
     })
   })
+    .then(response => response.json())
+    .then((toy) => {
+      renderSingleToy(toy)
+      toyForm.reset()
+    })
 }
 
-function likeToy(id) {
-  console.log("liked");
-  let toyLikes = document.getElementById(`likes-${id}`).innerText
-  toyLikes = Number(toyLikes.split(" ")[0]) + 1
-  fetch(`${toysURL}/${id}`, {
+// increase likes on a toy
+const likeToy = (event, toy) => {
+  console.log(event.target.id);
+
+  let increasedLikes = ++toy.likes
+  fetch(`${toysURL}/${toy.id}`, {
     method: 'PATCH',
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json"
     },
     body: JSON.stringify({
-      likes: toyLikes
+      "likes": increasedLikes
     })
   })
-  .then(response => response.json())
-  .then((toy) => {
-    let toyLikes = document.getElementById(`likes-${toy.id}`)
-    toyLikes.innerText = `${toy.likes} likes`
-  })
+    .then(response => response.json())
+    .then((updatedToy) => {
+      let toyLikes = document.getElementById(`likes-${updatedToy.id}`)
+      toyLikes.innerText = `${updatedToy.likes} likes`
+    })
 
 
-  // fetchToys()
 }
 
-newToyButton.addEventListener('click', saveNewToy)
-
+// call initial fetch function
 fetchToys()
+
+toyForm.addEventListener('submit', saveNewToy)
