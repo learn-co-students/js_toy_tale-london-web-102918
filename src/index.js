@@ -41,8 +41,10 @@ function loadEventListener() {
 // Add a toy
 function addNewToy(e) {
   e.preventDefault()
-  const toyName = document.querySelector("#toyname")
-  const toyImg = document.querySelector("#toyimg")
+  const toyName = document.querySelector("#toyname").value
+  const toyImg = document.querySelector("#toyimg").value
+  console.log(toyName, toyImg);
+
 
   fetch("http://localhost:3000/toys", {
       method: 'POST',
