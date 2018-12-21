@@ -1,107 +1,160 @@
-const addBtn = document.querySelector('#new-toy-btn')
-const toyForm = document.querySelector('.container')
+
+const addBtnEl = document.querySelector('#new-toy-btn')
+const toyFormContainerEl = document.querySelector('.container')
+const toyFormEl = document.querySelector('.add-toy-form')
+
+const toyCollectionEl = document.querySelector('#toy-collection')
+
+const toyNameInput = document.querySelector('input[name=name]')
+const toyImageInput = document.querySelector('input[name=image]')
+
 let addToy = false
-const toyCollection = document.querySelector('#toy-collection');
-const addToyForm = document.querySelector('.add-toy-form')
 
+const apiURL = 'http://localhost:3000/toys'
 
-// Load all event listeners
-function loadEventListener() {
-
-  // DOM Load event
-  document.addEventListener('DOMContentLoaded', fetchToys);
-  // Add Toy event
-  addToyForm.addEventListener('submit', addNewToy)
-  // Add Likes Event
-  document.addEventListener('click', (e) => {
-    console.log(e.target.dataset.id)
-    if (e.target.className === 'like-btn') {
-      const id = e.target.dataset.id
-      const toyEl = document.getElementById(`card-${id}`)
-      const toyLikes = toyEl.querySelector(".toy-likes")
-
-      let numLikes = Number(toyLikes.innerText.split(' ')[0]);
-      
-      fetch(`http://localhost:3000/toys/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({likes: numLikes += 1})
-      })
-      .then(response => response.json())
-      .then(toyLikes.innerText = `${numLikes} Likes`)
-    }
-  })
-}
-
-
-// Add a toy
-function addNewToy(e) {
-  e.preventDefault()
-  const toyName = document.querySelector("#toyname").value
-  const toyImg = document.querySelector("#toyimg").value
-
-  fetch("http://localhost:3000/toys", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      name: toyName, 
-      image: toyImg,
-      likes: 0}) 
-  })
-  .then(response => response.json())
-  .then(response => renderSingleToy(response))
-}
-
-// Fetch request for Toys
-function fetchToys() {
-  fetch("http://localhost:3000/toys")
-    .then(response => response.json())
-    .then(toysArray => {
-      renderToys(toysArray)
-  })
-}
-
-function renderToys(toysArray) {
-  toysArray.forEach(toy => renderSingleToy(toy))
-}
-
-function renderSingleToy(toy) {
-  // create element
-  const toyDivEl = document.createElement('div')
-  toyDivEl.className = 'card'
-  toyDivEl.id = `card-${toy.id}`
-
-  toyDivEl.innerHTML = `
-    <h2>${toy.name}</h2>
-    <img class='toy-avatar' src='${toy.image}' />
-    <p class="toy-likes">${toy.likes} Likes</p>
-    <button data-id=${toy.id} class='like-btn'>Like</button>
-  `
-  toyCollection.appendChild(toyDivEl)
-}
-
-function likeToy(toyLikesEl) {
-  const numLikes = Number(toyLikesEl.innerText.split(' ')[0]);
-  toyLikesEl.innerText = `${numLikes + 1} Likes`;
-
-} 
-
-addBtn.addEventListener('click', () => {
+addBtnEl.addEventListener('click', () => {
   // hide & seek with the form
   addToy = !addToy
   if (addToy) {
-    toyForm.style.display = 'block'
+    toyFormContainerEl.style.display = 'block'
     // submit listener here
   } else {
-    toyForm.style.display = 'none'
+    toyFormContainerEl.style.display = 'none'
   }
 })
 
-loadEventListener()
+
+/////////// Render the toys we get from the server
+
+// First we get the array of all toys from the server
+const fetchToys = () => {
+  return fetch(apiURL)
+    .then(response => response.json())
+    .then(renderAllToys)
+}
+
+// Then we iterate over the array and for each single toy...
+const renderAllToys = toys => {
+  toys.forEach(renderSingleToy)
+}
+
+// We render a div on the page
+const renderSingleToy = toy => {
+  const toyEl = document.createElement('div')
+  toyEl.className = 'card'
+  toyEl.dataset.id= toy.id
+  toyEl.innerHTML = `
+      <h2>${toy.name}</h2>
+      <img src="${toy.image}" class="toy-avatar" />
+      <p>${toy.likes} Likes </p>
+      <button class="like-btn">Like <3</button>
+      // <button class="delete-btn" data-id="${toy.id}">Delete</button>`
+
+  toyEl.querySelector('.like-btn').addEventListener('click', handleToyLike)
+  toyEl.querySelector('.delete-btn').addEventListener('click', handleToyDelete)
+
+  // append toy to the end of the list of toys
+  toyCollectionEl.appendChild(toyEl)
+}
+
+///////////////// Allow the user to add a new toy
+/*
+When a user clicks on the add new toy button -
+a POST request is sent to http://localhost:3000/toys
+The toy should conditionally render to the page.
+*/
+
+// function to handle the form submit
+const handleNewToySubmit = event => {
+  event.preventDefault()
+
+  fetch(apiURL, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body:JSON.stringify({
+      "name": toyNameInput.value,
+      "image": toyImageInput.value,
+      "likes": 0
+    })
+  })
+  .then(response => response.json())
+  .then(newToy => {
+    renderSingleToy(newToy)
+    toyFormEl.reset()
+  })
+}
+// then add the event listener
+toyFormEl.addEventListener('submit', handleNewToySubmit)
 
 
+// ///////////////// Allow the user to like a toy
 
+// /*
+//  Send a patch request to the server at http://localhost:3000/toys/:id updating the number of likes that the specific toy has
+// */
+
+// // function to handle the form submit
+const handleToyLike = event => {
+  // event.target is the button
+  // event.target.parentElement is the div.card
+  // div.card has the data-id attribute we can read with dataset
+  const toyCardEl = event.target.parentElement
+  const toyId = toyCardEl.dataset.id
+
+  // get current number of Likes
+  const likesText = toyCardEl.querySelector('p').innerText
+  let likesNr = parseInt(likesText)
+  likesNr++
+
+  fetch(`${apiURL}/${toyId}`, {
+    method: 'PATCH',
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body:JSON.stringify({
+      "likes": likesNr
+    })
+  })
+  .then(response => response.json())
+  .then(toy => {
+    toyCardEl.querySelector('p').innerText = `${toy.likes} Likes`
+  })
+} // end fn handleNewToySubmit
+
+
+// event listener isn't added globally, buy above when we renderSingleToy ^^^
+
+
+// Bonus: Allow the user to delete a toy
+const handleToyDelete = (event) => {
+
+  // display a little popup dialog
+  const confirmDelete = confirm('Are you sure you want to delete this toy? Press OK to delete or CANCEL to keep this toy.')
+  // confirm() returns true if user clicks OK or false if they click Cancel
+  // If they cancel, return now, don't execute the rest of the function..
+  if(!confirmDelete) return
+
+  // If they clicked OK, carry on and delete...
+
+  const toyId = event.target.dataset.id
+
+  fetch(`${apiURL}/${toyId}`, {
+    method: 'DELETE'
+  })
+  .then(res => res.json())
+  .then(toy => {
+    // remove the child we jsut deleted
+    // event.target.parentElement is the div.card
+    event.target.parentElement.remove()
+
+    // we could also rerender the whole page and fetch all toys again, but that's a lot more expensive
+    // toyCollectionEl.innerHTML = ''
+    // fetchToys()
+  })
+}
+//  Once we are all set, all functions are defined, fetch the toys to kick it all off...
+fetchToys()

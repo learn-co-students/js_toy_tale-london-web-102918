@@ -4,13 +4,13 @@
       "id": 1,
       "name": "Woody",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png",
-      "likes": 115
+      "likes": 123
     },
     {
       "id": 2,
       "name": "Buzz Lightyear",
       "image": "http://www.pngmart.com/files/6/Buzz-Lightyear-PNG-Transparent-Picture.png",
-      "likes": 8
+      "likes": 17
     },
     {
       "id": 3,
@@ -55,28 +55,22 @@
       "id": 9
     },
     {
-      "name": "Chris",
-      "image": "Superman",
-      "likes": 0,
-      "id": 10
-    },
-    {
-      "name": "Chris",
-      "image": "Superman",
-      "likes": 0,
-      "id": 11
-    },
-    {
       "name": "wachira",
       "image": "Btaman",
-      "likes": 0,
+      "likes": 1,
       "id": 12
     },
     {
       "name": "Tommmyyyy",
       "image": "Spiderman",
-      "likes": 0,
+      "likes": 4,
       "id": 13
+    },
+    {
+      "name": "damanyyyyyyyy",
+      "image": "Americannnnnnn",
+      "likes": 6,
+      "id": 15
     }
   ]
 }
